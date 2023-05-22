@@ -1,8 +1,9 @@
-import { CircleData } from "./circleData.js";
+import { CircleData } from "./circleData.js"; //명시적 모듈화(es6)
 import { Item } from "./item.js";
 
 function game(item) {
   var next = items.getNext(item);
+
   if (item === comCurrentItem) {
     alert("비겼습니다");
   } else if (next === comCurrentItem) {
@@ -10,6 +11,7 @@ function game(item) {
   } else {
     alert("이겼습니다");
   }
+
   clearInterval(setTime);
   startEl.removeAttribute("disabled");
   items.getAll().forEach(function (item) {
@@ -26,6 +28,7 @@ var items = new CircleData([
 var startEl = document.getElementById("start");
 var comEl = document.getElementById("com");
 var comCurrentItem = items.getAll()[0];
+//항목 생성(여기서 어디에 버튼을 넣어줄지 지정)
 var itemButtonEl = document.getElementById("item-buttons");
 var setTime;
 
@@ -42,6 +45,7 @@ startEl.onclick = function () {
     item.disable(false);
   });
 
+  //가위바위보 랜덤돌리기(setInterval)
   setTime = setInterval(() => {
     comCurrentItem = items.getNext(comCurrentItem);
     comEl.textContent = comCurrentItem.name;
