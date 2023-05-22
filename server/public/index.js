@@ -1,48 +1,49 @@
+import { CircleData } from "./circleData.js";
+import { Item } from "./item.js";
+
+function game(item) {
+  var next = items.getNext(item);
+  if (item === comCurrentItem) {
+    alert("비겼습니다");
+  } else if (next === comCurrentItem) {
+    alert("졌습니다");
+  } else {
+    alert("이겼습니다");
+  }
+  clearInterval(setTime);
+  startEl.removeAttribute("disabled");
+  items.getAll().forEach(function (item) {
+    item.disable(true);
+  });
+}
+
+var items = new CircleData([
+  new Item("가위", game),
+  new Item("바위", game),
+  new Item("보", game),
+]);
+
 var startEl = document.getElementById("start");
 var comEl = document.getElementById("com");
+var comCurrentItem = items.getAll()[0];
+var itemButtonEl = document.getElementById("item-buttons");
+var setTime;
 
-var items = ["가위", "바위", "보"];
-var currentIndex = 0;
+//항목 렌더링
+items.getAll().forEach(function (item) {
+  item.render(itemButtonEl);
+  item.disable(true);
+});
 
+//시작 클릭이벤트 핸들링
 startEl.onclick = function () {
-  setInterval(function () {
-    currentIndex = ++currentIndex % 3;
-    comEl.textContent = items[currentIndex];
+  startEl.setAttribute("disabled", true);
+  items.getAll().forEach(function (item) {
+    item.disable(false);
+  });
+
+  setTime = setInterval(() => {
+    comCurrentItem = items.getNext(comCurrentItem);
+    comEl.textContent = comCurrentItem.name;
   }, 100);
-};
-
-var scissorsEl = document.getElementById("scissors");
-scissorsEl.onclick = function () {
-  var com = items[currentIndex];
-  if (com === "가위") {
-    alert("비겼습니다");
-  } else if (com === "바위") {
-    alert("졌습니다");
-  } else {
-    alert("이겼습니다");
-  }
-};
-
-var rockEl = document.getElementById("rock");
-rockEl.onclick = function () {
-  var com = items[currentIndex];
-  if (com === "가위") {
-    alert("이겼습니다");
-  } else if (com === "바위") {
-    alert("비겼습니다");
-  } else {
-    alert("졌습니다");
-  }
-};
-
-var paperEl = document.getElementById("paper");
-paperEl.onclick = function () {
-  var com = items[currentIndex];
-  if (com === "가위") {
-    alert("졌습니다");
-  } else if (com === "바위") {
-    alert("이겼습니다");
-  } else {
-    alert("비겼습니다");
-  }
 };
